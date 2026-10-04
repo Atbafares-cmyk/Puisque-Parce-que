@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Puisque ou parce que ?</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+[hidden]{display:none!important}
+/* Layout : une seule colonne pour téléphone. Une carte au centre, trois tas en dessous, puis le récapitulatif. */
+:root{
+  --bg:#EAF4FC; --surface:#FFFFFF; --ink:#1D2340; --muted:#5B6080; --line:#D9D2EE;
+  --brand:#0B5CAB; --brand-ink:#FFFFFF;
+  --p1:#CFEEDD; --p1-ink:#0E5234;   /* projet */
+  --p2:#FFD9CC; --p2-ink:#7A2A10;   /* pas un projet */
+  --p3:#FFEDB3; --p3-ink:#6A4B00; --p4:#D6E4FF; --p4-ink:#1B3A7A; --p5:#EBD9FB; --p5-ink:#4A1F78;   /* ça dépend */
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --body:Lato,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#17152A; --surface:#231F3D; --ink:#F1EEFB; --muted:#B3AED0; --line:#3A3560;
+  --brand:#7DB6F2; --brand-ink:#0B1730;
+  --p1:#1F4D3A; --p1-ink:#CFF3E0; --p2:#5A2A1C; --p2-ink:#FFDDD1; --p3:#57430A; --p3-ink:#FFEBB0; --p4:#24386B; --p4-ink:#D6E4FF; --p5:#452363; --p5-ink:#EBD9FB;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#17152A; --surface:#231F3D; --ink:#F1EEFB; --muted:#B3AED0; --line:#3A3560;
+  --brand:#7DB6F2; --brand-ink:#0B1730;
+  --p1:#1F4D3A; --p1-ink:#CFF3E0; --p2:#5A2A1C; --p2-ink:#FFDDD1; --p3:#57430A; --p3-ink:#FFEBB0; --p4:#24386B; --p4-ink:#D6E4FF; --p5:#452363; --p5-ink:#EBD9FB;
+  color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+.wrap{max-width:520px;margin:0 auto;padding-inline:16px;padding-block:20px 32px;display:flex;flex-direction:column;gap:16px}
+header{display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--display);font-weight:800;font-size:30px;line-height:1.05;margin:0;color:var(--brand);text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:20px;margin:0;text-wrap:balance}
+.rule{margin:0;color:var(--muted);font-size:15px}
+.progress{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{flex:1;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .25s}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:22px 20px;min-height:150px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.card .num{font-family:var(--display);font-weight:800;font-size:15px;color:var(--brand)}
+.card .txt{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;text-wrap:balance}
+.piles{display:flex;flex-direction:column;gap:10px}
+button{font:inherit;color:inherit;cursor:pointer;border:0;border-radius:14px}
+button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.pile{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;font-weight:700;font-size:18px;text-align:left;min-height:58px}
+.pile small{font-weight:400;font-size:14px;opacity:.85;font-variant-numeric:tabular-nums}
+.p1{background:var(--p1);color:var(--p1-ink)} .p2{background:var(--p2);color:var(--p2-ink)} .p3{background:var(--p3);color:var(--p3-ink)} .p4{background:var(--p4);color:var(--p4-ink)} .p5{background:var(--p5);color:var(--p5-ink)}
+.pile em{display:block;font-style:normal;font-weight:400;font-size:14px;line-height:1.3;margin-top:2px}
+.stairs .pile:nth-child(2){margin-left:4%}.stairs .pile:nth-child(3){margin-left:8%}.stairs .pile:nth-child(4){margin-left:12%}.stairs .pile:nth-child(5){margin-left:16%}
+.context{background:var(--surface);border-left:5px solid var(--brand);border-radius:10px;padding:12px 14px;margin:0}
+.card .txt{font-size:21px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.ghost{background:transparent;border:2px solid var(--line);padding:10px 14px;font-size:15px;color:var(--ink)}
+.solid{background:var(--brand);color:var(--brand-ink);padding:12px 16px;font-weight:700}
+details{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px 16px}
+summary{font-weight:700;cursor:pointer}
+details ol{margin:10px 0 2px;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.group{border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.group h2{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.group h2 span{font-family:var(--body);font-size:14px;font-weight:400}
+.item{background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.item .line{display:flex;gap:10px;align-items:baseline}
+.item b{font-family:var(--display);color:var(--brand);min-width:1.6em;font-variant-numeric:tabular-nums}
+.item .txt{min-width:0;flex:1}
+.item .mv{background:transparent;border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;font-size:14px;align-self:flex-start}
+.chooser{display:flex;gap:6px;flex-wrap:wrap}
+.chooser button{padding:8px 12px;font-size:14px;font-weight:700;border-radius:10px}
+.empty{font-size:14px;opacity:.8;margin:0}
+.note{font-size:15px;color:var(--muted);margin:0}
+.confirm{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+@media (prefers-reduced-motion: reduce){ .bar i{transition:none} }
+
+.qr{display:flex;flex-direction:column;gap:10px;align-items:center;padding-top:10px}
+.qr svg{width:min(100%,340px);height:auto;border-radius:8px}
+.qr code{font-size:13px;word-break:break-all;text-align:center}
+.copy{font-size:13px;color:var(--muted);text-align:center;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Bloc 2 · Exercice cartes</div>
+    <h1>Puisque ou parce que ?</h1>
+    <p class="rule">En sous-groupe. Quatre phrases, deux tas. Pour chaque phrase, choisissez un tas et dites en une phrase ce qui vous a fait basculer.</p>
+  </header>
+
+  <section id="play" class="wrap" style="padding:0">
+    <div class="progress"><span id="count">Phrase 1 sur 4</span><div class="bar"><i id="fill" style="width:0%"></i></div></div>
+    <div class="card" aria-live="polite"><div class="num" id="cnum">Phrase 1</div><div class="txt" id="ctxt"></div></div>
+    <div class="piles">
+      <button class="pile p1" id="b1" data-p="1"><span>L’émetteur y est<em>Il assume la raison. Il se compte dedans.</em></span> <small id="n1">0</small></button>
+      <button class="pile p2" id="b2" data-p="2"><span>L’émetteur s’en distancie<em>Il rapporte, il transmet, il parle de « ils ».</em></span> <small id="n2">0</small></button>
+    </div>
+    <div class="row">
+      <button class="ghost" id="back">Revenir à la phrase précédente</button>
+    </div>
+  </section>
+
+  <section id="recap" class="wrap" style="padding:0" hidden>
+    <h2>Votre tri</h2>
+    <p class="note">Gardez cet écran ouvert pour la restitution. Pour changer une phrase de tas, touchez « Déplacer ».</p>
+    <div id="groups" class="wrap" style="padding:0"></div>
+  </section>
+
+  <details>
+    <summary>Rappel : les deux tas</summary>
+    <ol>
+      <li><strong>L’émetteur y est</strong> : il assume la raison, il se compte dedans.</li>
+      <li><strong>L’émetteur s’en distancie</strong> : il rapporte, il transmet, il parle de « ils ».</li>
+    </ol>
+    <p class="note">Ce n’est pas le tas qui compte, c’est ce qui vous a fait basculer.</p>
+  </details>
+
+
+  <details>
+    <summary>Formateur : afficher le QR code</summary>
+    <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45" role="img" aria-label="QR code de la page" shape-rendering="crispEdges"><rect width="45" height="45" fill="#fff"/><path d="M4,4h1v1h-1zM5,4h1v1h-1zM6,4h1v1h-1zM7,4h1v1h-1zM8,4h1v1h-1zM9,4h1v1h-1zM10,4h1v1h-1zM13,4h1v1h-1zM14,4h1v1h-1zM15,4h1v1h-1zM17,4h1v1h-1zM21,4h1v1h-1zM22,4h1v1h-1zM23,4h1v1h-1zM26,4h1v1h-1zM29,4h1v1h-1zM30,4h1v1h-1zM32,4h1v1h-1zM34,4h1v1h-1zM35,4h1v1h-1zM36,4h1v1h-1zM37,4h1v1h-1zM38,4h1v1h-1zM39,4h1v1h-1zM40,4h1v1h-1zM4,5h1v1h-1zM10,5h1v1h-1zM12,5h1v1h-1zM13,5h1v1h-1zM15,5h1v1h-1zM16,5h1v1h-1zM17,5h1v1h-1zM18,5h1v1h-1zM20,5h1v1h-1zM22,5h1v1h-1zM23,5h1v1h-1zM30,5h1v1h-1zM32,5h1v1h-1zM34,5h1v1h-1zM40,5h1v1h-1zM4,6h1v1h-1zM6,6h1v1h-1zM7,6h1v1h-1zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM13,6h1v1h-1zM14,6h1v1h-1zM15,6h1v1h-1zM20,6h1v1h-1zM22,6h1v1h-1zM23,6h1v1h-1zM24,6h1v1h-1zM25,6h1v1h-1zM26,6h1v1h-1zM30,6h1v1h-1zM31,6h1v1h-1zM32,6h1v1h-1zM34,6h1v1h-1zM36,6h1v1h-1zM37,6h1v1h-1zM38,6h1v1h-1zM40,6h1v1h-1zM4,7h1v1h-1zM6,7h1v1h-1zM7,7h1v1h-1zM8,7h1v1h-1zM10,7h1v1h-1zM12,7h1v1h-1zM13,7h1v1h-1zM14,7h1v1h-1zM17,7h1v1h-1zM18,7h1v1h-1zM19,7h1v1h-1zM21,7h1v1h-1zM23,7h1v1h-1zM25,7h1v1h-1zM28,7h1v1h-1zM29,7h1v1h-1zM32,7h1v1h-1zM34,7h1v1h-1zM36,7h1v1h-1zM37,7h1v1h-1zM38,7h1v1h-1zM40,7h1v1h-1zM4,8h1v1h-1zM6,8h1v1h-1zM7,8h1v1h-1zM8,8h1v1h-1zM10,8h1v1h-1zM14,8h1v1h-1zM16,8h1v1h-1zM18,8h1v1h-1zM24,8h1v1h-1zM25,8h1v1h-1zM26,8h1v1h-1zM27,8h1v1h-1zM29,8h1v1h-1zM30,8h1v1h-1zM32,8h1v1h-1zM34,8h1v1h-1zM36,8h1v1h-1zM37,8h1v1h-1zM38,8h1v1h-1zM40,8h1v1h-1zM4,9h1v1h-1zM10,9h1v1h-1zM13,9h1v1h-1zM14,9h1v1h-1zM16,9h1v1h-1zM20,9h1v1h-1zM22,9h1v1h-1zM24,9h1v1h-1zM26,9h1v1h-1zM30,9h1v1h-1zM34,9h1v1h-1zM40,9h1v1h-1zM4,10h1v1h-1zM5,10h1v1h-1zM6,10h1v1h-1zM7,10h1v1h-1zM8,10h1v1h-1zM9,10h1v1h-1zM10,10h1v1h-1zM12,10h1v1h-1zM14,10h1v1h-1zM16,10h1v1h-1zM18,10h1v1h-1zM20,10h1v1h-1zM22,10h1v1h-1zM24,10h1v1h-1zM26,10h1v1h-1zM28,10h1v1h-1zM30,10h1v1h-1zM32,10h1v1h-1zM34,10h1v1h-1zM35,10h1v1h-1zM36,10h1v1h-1zM37,10h1v1h-1zM38,10h1v1h-1zM39,10h1v1h-1zM40,10h1v1h-1zM12,11h1v1h-1zM14,11h1v1h-1zM15,11h1v1h-1zM17,11h1v1h-1zM18,11h1v1h-1zM19,11h1v1h-1zM23,11h1v1h-1zM24,11h1v1h-1zM26,11h1v1h-1zM27,11h1v1h-1zM30,11h1v1h-1zM31,11h1v1h-1zM4,12h1v1h-1zM10,12h1v1h-1zM12,12h1v1h-1zM15,12h1v1h-1zM19,12h1v1h-1zM22,12h1v1h-1zM23,12h1v1h-1zM24,12h1v1h-1zM29,12h1v1h-1zM30,12h1v1h-1zM31,12h1v1h-1zM33,12h1v1h-1zM34,12h1v1h-1zM37,12h1v1h-1zM38,12h1v1h-1zM39,12h1v1h-1zM4,13h1v1h-1zM5,13h1v1h-1zM6,13h1v1h-1zM8,13h1v1h-1zM11,13h1v1h-1zM12,13h1v1h-1zM15,13h1v1h-1zM17,13h1v1h-1zM18,13h1v1h-1zM24,13h1v1h-1zM26,13h1v1h-1zM27,13h1v1h-1zM31,13h1v1h-1zM33,13h1v1h-1zM35,13h1v1h-1zM36,13h1v1h-1zM38,13h1v1h-1zM39,13h1v1h-1zM4,14h1v1h-1zM10,14h1v1h-1zM13,14h1v1h-1zM16,14h1v1h-1zM21,14h1v1h-1zM22,14h1v1h-1zM24,14h1v1h-1zM25,14h1v1h-1zM26,14h1v1h-1zM29,14h1v1h-1zM31,14h1v1h-1zM32,14h1v1h-1zM34,14h1v1h-1zM35,14h1v1h-1zM36,14h1v1h-1zM37,14h1v1h-1zM39,14h1v1h-1zM40,14h1v1h-1zM4,15h1v1h-1zM5,15h1v1h-1zM8,15h1v1h-1zM15,15h1v1h-1zM16,15h1v1h-1zM17,15h1v1h-1zM18,15h1v1h-1zM19,15h1v1h-1zM20,15h1v1h-1zM22,15h1v1h-1zM28,15h1v1h-1zM30,15h1v1h-1zM32,15h1v1h-1zM33,15h1v1h-1zM34,15h1v1h-1zM35,15h1v1h-1zM36,15h1v1h-1zM37,15h1v1h-1zM40,15h1v1h-1zM4,16h1v1h-1zM7,16h1v1h-1zM10,16h1v1h-1zM11,16h1v1h-1zM13,16h1v1h-1zM14,16h1v1h-1zM15,16h1v1h-1zM20,16h1v1h-1zM23,16h1v1h-1zM24,16h1v1h-1zM27,16h1v1h-1zM28,16h1v1h-1zM30,16h1v1h-1zM31,16h1v1h-1zM34,16h1v1h-1zM35,16h1v1h-1zM40,16h1v1h-1zM6,17h1v1h-1zM7,17h1v1h-1zM9,17h1v1h-1zM13,17h1v1h-1zM14,17h1v1h-1zM17,17h1v1h-1zM18,17h1v1h-1zM19,17h1v1h-1zM20,17h1v1h-1zM21,17h1v1h-1zM22,17h1v1h-1zM23,17h1v1h-1zM25,17h1v1h-1zM27,17h1v1h-1zM31,17h1v1h-1zM32,17h1v1h-1zM33,17h1v1h-1zM35,17h1v1h-1zM37,17h1v1h-1zM39,17h1v1h-1zM40,17h1v1h-1zM8,18h1v1h-1zM10,18h1v1h-1zM13,18h1v1h-1zM14,18h1v1h-1zM17,18h1v1h-1zM18,18h1v1h-1zM19,18h1v1h-1zM21,18h1v1h-1zM24,18h1v1h-1zM26,18h1v1h-1zM28,18h1v1h-1zM31,18h1v1h-1zM32,18h1v1h-1zM34,18h1v1h-1zM35,18h1v1h-1zM36,18h1v1h-1zM37,18h1v1h-1zM39,18h1v1h-1zM40,18h1v1h-1zM5,19h1v1h-1zM8,19h1v1h-1zM9,19h1v1h-1zM15,19h1v1h-1zM16,19h1v1h-1zM17,19h1v1h-1zM20,19h1v1h-1zM21,19h1v1h-1zM22,19h1v1h-1zM23,19h1v1h-1zM26,19h1v1h-1zM27,19h1v1h-1zM30,19h1v1h-1zM32,19h1v1h-1zM34,19h1v1h-1zM35,19h1v1h-1zM37,19h1v1h-1zM38,19h1v1h-1zM39,19h1v1h-1zM40,19h1v1h-1zM5,20h1v1h-1zM6,20h1v1h-1zM7,20h1v1h-1zM10,20h1v1h-1zM13,20h1v1h-1zM14,20h1v1h-1zM15,20h1v1h-1zM16,20h1v1h-1zM18,20h1v1h-1zM19,20h1v1h-1zM20,20h1v1h-1zM23,20h1v1h-1zM26,20h1v1h-1zM27,20h1v1h-1zM29,20h1v1h-1zM30,20h1v1h-1zM31,20h1v1h-1zM32,20h1v1h-1zM33,20h1v1h-1zM34,20h1v1h-1zM36,20h1v1h-1zM38,20h1v1h-1zM39,20h1v1h-1zM6,21h1v1h-1zM9,21h1v1h-1zM11,21h1v1h-1zM12,21h1v1h-1zM13,21h1v1h-1zM15,21h1v1h-1zM17,21h1v1h-1zM21,21h1v1h-1zM22,21h1v1h-1zM24,21h1v1h-1zM25,21h1v1h-1zM27,21h1v1h-1zM29,21h1v1h-1zM31,21h1v1h-1zM32,21h1v1h-1zM33,21h1v1h-1zM39,21h1v1h-1zM4,22h1v1h-1zM7,22h1v1h-1zM8,22h1v1h-1zM10,22h1v1h-1zM16,22h1v1h-1zM19,22h1v1h-1zM24,22h1v1h-1zM25,22h1v1h-1zM26,22h1v1h-1zM27,22h1v1h-1zM29,22h1v1h-1zM31,22h1v1h-1zM34,22h1v1h-1zM35,22h1v1h-1zM36,22h1v1h-1zM37,22h1v1h-1zM40,22h1v1h-1zM6,23h1v1h-1zM9,23h1v1h-1zM12,23h1v1h-1zM14,23h1v1h-1zM16,23h1v1h-1zM17,23h1v1h-1zM18,23h1v1h-1zM23,23h1v1h-1zM24,23h1v1h-1zM30,23h1v1h-1zM34,23h1v1h-1zM35,23h1v1h-1zM37,23h1v1h-1zM40,23h1v1h-1zM4,24h1v1h-1zM10,24h1v1h-1zM13,24h1v1h-1zM14,24h1v1h-1zM15,24h1v1h-1zM18,24h1v1h-1zM19,24h1v1h-1zM20,24h1v1h-1zM21,24h1v1h-1zM23,24h1v1h-1zM26,24h1v1h-1zM27,24h1v1h-1zM28,24h1v1h-1zM29,24h1v1h-1zM30,24h1v1h-1zM31,24h1v1h-1zM33,24h1v1h-1zM34,24h1v1h-1zM36,24h1v1h-1zM37,24h1v1h-1zM38,24h1v1h-1zM5,25h1v1h-1zM6,25h1v1h-1zM8,25h1v1h-1zM12,25h1v1h-1zM13,25h1v1h-1zM14,25h1v1h-1zM15,25h1v1h-1zM22,25h1v1h-1zM23,25h1v1h-1zM25,25h1v1h-1zM27,25h1v1h-1zM28,25h1v1h-1zM30,25h1v1h-1zM31,25h1v1h-1zM36,25h1v1h-1zM38,25h1v1h-1zM4,26h1v1h-1zM5,26h1v1h-1zM6,26h1v1h-1zM10,26h1v1h-1zM11,26h1v1h-1zM19,26h1v1h-1zM20,26h1v1h-1zM22,26h1v1h-1zM24,26h1v1h-1zM25,26h1v1h-1zM31,26h1v1h-1zM33,26h1v1h-1zM34,26h1v1h-1zM35,26h1v1h-1zM36,26h1v1h-1zM37,26h1v1h-1zM40,26h1v1h-1zM4,27h1v1h-1zM5,27h1v1h-1zM9,27h1v1h-1zM11,27h1v1h-1zM12,27h1v1h-1zM15,27h1v1h-1zM17,27h1v1h-1zM18,27h1v1h-1zM20,27h1v1h-1zM27,27h1v1h-1zM28,27h1v1h-1zM30,27h1v1h-1zM31,27h1v1h-1zM32,27h1v1h-1zM33,27h1v1h-1zM34,27h1v1h-1zM35,27h1v1h-1zM36,27h1v1h-1zM37,27h1v1h-1zM39,27h1v1h-1zM5,28h1v1h-1zM8,28h1v1h-1zM9,28h1v1h-1zM10,28h1v1h-1zM12,28h1v1h-1zM14,28h1v1h-1zM16,28h1v1h-1zM17,28h1v1h-1zM18,28h1v1h-1zM20,28h1v1h-1zM21,28h1v1h-1zM22,28h1v1h-1zM24,28h1v1h-1zM28,28h1v1h-1zM31,28h1v1h-1zM34,28h1v1h-1zM39,28h1v1h-1zM40,28h1v1h-1zM4,29h1v1h-1zM5,29h1v1h-1zM7,29h1v1h-1zM13,29h1v1h-1zM14,29h1v1h-1zM16,29h1v1h-1zM17,29h1v1h-1zM18,29h1v1h-1zM20,29h1v1h-1zM21,29h1v1h-1zM26,29h1v1h-1zM27,29h1v1h-1zM28,29h1v1h-1zM30,29h1v1h-1zM31,29h1v1h-1zM32,29h1v1h-1zM35,29h1v1h-1zM37,29h1v1h-1zM38,29h1v1h-1zM4,30h1v1h-1zM7,30h1v1h-1zM8,30h1v1h-1zM9,30h1v1h-1zM10,30h1v1h-1zM14,30h1v1h-1zM21,30h1v1h-1zM22,30h1v1h-1zM25,30h1v1h-1zM26,30h1v1h-1zM29,30h1v1h-1zM31,30h1v1h-1zM32,30h1v1h-1zM34,30h1v1h-1zM35,30h1v1h-1zM38,30h1v1h-1zM39,30h1v1h-1zM40,30h1v1h-1zM4,31h1v1h-1zM7,31h1v1h-1zM12,31h1v1h-1zM14,31h1v1h-1zM15,31h1v1h-1zM16,31h1v1h-1zM17,31h1v1h-1zM18,31h1v1h-1zM19,31h1v1h-1zM22,31h1v1h-1zM31,31h1v1h-1zM32,31h1v1h-1zM35,31h1v1h-1zM36,31h1v1h-1zM37,31h1v1h-1zM38,31h1v1h-1zM39,31h1v1h-1zM40,31h1v1h-1zM4,32h1v1h-1zM7,32h1v1h-1zM8,32h1v1h-1zM9,32h1v1h-1zM10,32h1v1h-1zM11,32h1v1h-1zM12,32h1v1h-1zM13,32h1v1h-1zM14,32h1v1h-1zM21,32h1v1h-1zM23,32h1v1h-1zM26,32h1v1h-1zM28,32h1v1h-1zM29,32h1v1h-1zM30,32h1v1h-1zM31,32h1v1h-1zM32,32h1v1h-1zM33,32h1v1h-1zM34,32h1v1h-1zM35,32h1v1h-1zM36,32h1v1h-1zM37,32h1v1h-1zM38,32h1v1h-1zM12,33h1v1h-1zM13,33h1v1h-1zM14,33h1v1h-1zM15,33h1v1h-1zM18,33h1v1h-1zM19,33h1v1h-1zM21,33h1v1h-1zM22,33h1v1h-1zM23,33h1v1h-1zM24,33h1v1h-1zM27,33h1v1h-1zM32,33h1v1h-1zM36,33h1v1h-1zM39,33h1v1h-1zM4,34h1v1h-1zM5,34h1v1h-1zM6,34h1v1h-1zM7,34h1v1h-1zM8,34h1v1h-1zM9,34h1v1h-1zM10,34h1v1h-1zM14,34h1v1h-1zM16,34h1v1h-1zM17,34h1v1h-1zM19,34h1v1h-1zM20,34h1v1h-1zM23,34h1v1h-1zM24,34h1v1h-1zM25,34h1v1h-1zM27,34h1v1h-1zM30,34h1v1h-1zM32,34h1v1h-1zM34,34h1v1h-1zM36,34h1v1h-1zM40,34h1v1h-1zM4,35h1v1h-1zM10,35h1v1h-1zM14,35h1v1h-1zM17,35h1v1h-1zM18,35h1v1h-1zM20,35h1v1h-1zM21,35h1v1h-1zM22,35h1v1h-1zM23,35h1v1h-1zM24,35h1v1h-1zM28,35h1v1h-1zM31,35h1v1h-1zM32,35h1v1h-1zM36,35h1v1h-1zM39,35h1v1h-1zM40,35h1v1h-1zM4,36h1v1h-1zM6,36h1v1h-1zM7,36h1v1h-1zM8,36h1v1h-1zM10,36h1v1h-1zM14,36h1v1h-1zM16,36h1v1h-1zM18,36h1v1h-1zM19,36h1v1h-1zM20,36h1v1h-1zM23,36h1v1h-1zM26,36h1v1h-1zM27,36h1v1h-1zM28,36h1v1h-1zM29,36h1v1h-1zM30,36h1v1h-1zM31,36h1v1h-1zM32,36h1v1h-1zM33,36h1v1h-1zM34,36h1v1h-1zM35,36h1v1h-1zM36,36h1v1h-1zM38,36h1v1h-1zM40,36h1v1h-1zM4,37h1v1h-1zM6,37h1v1h-1zM7,37h1v1h-1zM8,37h1v1h-1zM10,37h1v1h-1zM14,37h1v1h-1zM15,37h1v1h-1zM17,37h1v1h-1zM18,37h1v1h-1zM20,37h1v1h-1zM22,37h1v1h-1zM23,37h1v1h-1zM26,37h1v1h-1zM27,37h1v1h-1zM29,37h1v1h-1zM30,37h1v1h-1zM31,37h1v1h-1zM32,37h1v1h-1zM33,37h1v1h-1zM34,37h1v1h-1zM40,37h1v1h-1zM4,38h1v1h-1zM6,38h1v1h-1zM7,38h1v1h-1zM8,38h1v1h-1zM10,38h1v1h-1zM14,38h1v1h-1zM15,38h1v1h-1zM19,38h1v1h-1zM20,38h1v1h-1zM24,38h1v1h-1zM30,38h1v1h-1zM31,38h1v1h-1zM37,38h1v1h-1zM38,38h1v1h-1zM39,38h1v1h-1zM40,38h1v1h-1zM4,39h1v1h-1zM10,39h1v1h-1zM15,39h1v1h-1zM16,39h1v1h-1zM17,39h1v1h-1zM24,39h1v1h-1zM27,39h1v1h-1zM28,39h1v1h-1zM30,39h1v1h-1zM31,39h1v1h-1zM32,39h1v1h-1zM36,39h1v1h-1zM37,39h1v1h-1zM40,39h1v1h-1zM4,40h1v1h-1zM5,40h1v1h-1zM6,40h1v1h-1zM7,40h1v1h-1zM8,40h1v1h-1zM9,40h1v1h-1zM10,40h1v1h-1zM12,40h1v1h-1zM13,40h1v1h-1zM14,40h1v1h-1zM15,40h1v1h-1zM16,40h1v1h-1zM18,40h1v1h-1zM19,40h1v1h-1zM24,40h1v1h-1zM26,40h1v1h-1zM27,40h1v1h-1zM32,40h1v1h-1zM34,40h1v1h-1zM35,40h1v1h-1zM37,40h1v1h-1zM40,40h1v1h-1z" fill="#000"/></svg><code>https://atbafares-cmyk.github.io/Projet-Pas-Projet/puisque-parce-que.html</code></div>
+  </details>
+
+  <div class="row"><button class="ghost" id="reset">Recommencer le tri</button></div>
+  <div class="confirm" id="confirm" hidden>
+    <div>Effacer votre tri et repartir de la première phrase ?</div>
+    <div class="row"><button class="solid" id="yes">Oui, recommencer</button><button class="ghost" id="no">Non, garder mon tri</button></div>
+  </div>
+  <footer class="copy">© <span id="yr">2026</span> 23 MindSet - Fares ATBA. Tous droits réservés.</footer>
+</div>
+
+<script>
+var CARDS=[
+ "« Puisque la direction l’a décidé, on change le circuit de traitement. »",
+ "« J’ai demandé qu’on nous laisse trois mois, on nous en donne deux. Voilà où on en est. »",
+ "« Ils s’imaginent qu’on va pouvoir absorber ça sans moyens supplémentaires. »",
+ "« J’ai besoin de votre retour avant vendredi pour pouvoir arbitrer lundi. »"
+];
+var PILES={1:"L’émetteur y est",2:"L’émetteur s’en distancie"};
+var PIDS=[1,2];
+var KEY="ppq-ex-v1";
+var state={a:[],open:-1};           // a[i] = tas choisi (1,2,3) pour la carte i
+function load(){try{var s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.a))state.a=s.a.slice(0,CARDS.length)}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({a:state.a}))}catch(e){}}
+function $(id){return document.getElementById(id)}
+function counts(){var c={};PIDS.forEach(function(p){c[p]=0});state.a.forEach(function(p){if(c[p]!==undefined)c[p]++});return c}
+function render(){
+  var i=state.a.length,done=i>=CARDS.length,c=counts();
+  $("play").hidden=done; $("recap").hidden=!done;
+  PIDS.forEach(function(p){$("n"+p).textContent=c[p]});
+  if(!done){
+    $("count").textContent="Phrase "+(i+1)+" sur "+CARDS.length;
+    $("fill").style.width=(i/CARDS.length*100)+"%";
+    $("cnum").textContent="Phrase "+(i+1);
+    $("ctxt").textContent=CARDS[i];
+    $("back").hidden=i===0;
+  }else{ renderRecap(c) }
+}
+function renderRecap(c){
+  var g=$("groups");g.textContent="";
+  PIDS.forEach(function(p){
+    var box=document.createElement("div");box.className="group p"+p;
+    var h=document.createElement("h2");h.textContent=PILES[p];
+    var sp=document.createElement("span");sp.textContent=c[p]+(c[p]>1?" phrases":" phrase");h.appendChild(sp);box.appendChild(h);
+    var any=false;
+    state.a.forEach(function(v,i){
+      if(v!==p)return;any=true;
+      var it=document.createElement("div");it.className="item";
+      var ln=document.createElement("div");ln.className="line";
+      var b=document.createElement("b");b.textContent=i+1;
+      var t=document.createElement("span");t.className="txt";t.textContent=CARDS[i];
+      ln.appendChild(b);ln.appendChild(t);it.appendChild(ln);
+      if(state.open===i){
+        var ch=document.createElement("div");ch.className="chooser";
+        PIDS.forEach(function(q){ if(q===p)return;
+          var bt=document.createElement("button");bt.className="p"+q;bt.textContent="Vers « "+PILES[q]+" »";
+          bt.onclick=function(){state.a[i]=q;state.open=-1;save();render()};ch.appendChild(bt)});
+        var cancel=document.createElement("button");cancel.className="ghost";cancel.textContent="Annuler";
+        cancel.onclick=function(){state.open=-1;render()};ch.appendChild(cancel);it.appendChild(ch);
+      }else{
+        var mv=document.createElement("button");mv.className="mv";mv.textContent="Déplacer";
+        mv.setAttribute("aria-label","Déplacer la phrase "+(i+1));
+        mv.onclick=function(){state.open=i;render()};it.appendChild(mv);
+      }
+      box.appendChild(it);
+    });
+    if(!any){var e=document.createElement("p");e.className="empty";e.textContent="Aucune phrase dans ce tas.";box.appendChild(e)}
+    g.appendChild(box);
+  });
+}
+PIDS.forEach(function(p){$("b"+p).onclick=function(){
+  if(state.a.length<CARDS.length){state.a.push(+this.dataset.p);save();render()}}});
+$("back").onclick=function(){state.a.pop();save();render()};
+$("reset").onclick=function(){$("confirm").hidden=false;$("yes").focus()};
+$("no").onclick=function(){$("confirm").hidden=true};
+$("yes").onclick=function(){state.a=[];state.open=-1;save();$("confirm").hidden=true;render();window.scrollTo(0,0)};
+try{document.getElementById("yr").textContent=new Date().getFullYear()}catch(e){}
+load();render();
+</script>
+</body>
+</html>
